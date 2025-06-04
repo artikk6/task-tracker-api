@@ -2,7 +2,6 @@ package com.github.task.tracker.store.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
@@ -10,23 +9,22 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "task")
 public class TaskEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    Long id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
-    String name;
+    private String name;
 
     @Column(length = 1024)
-    String description;
+    private String description;
 
-    LocalDate createdAt = LocalDate.now();
+    private LocalDate createdAt = LocalDate.now();
 
     @ManyToOne
-    ProjectEntity project;
+    private ProjectEntity project;
 
 }

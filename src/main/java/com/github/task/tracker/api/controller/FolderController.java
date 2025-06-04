@@ -1,13 +1,13 @@
-package com.github.task.tracker.api.controllers;
+package com.github.task.tracker.api.controller;
 
-import com.github.task.tracker.api.dto.ProjectDto;
+import com.github.task.tracker.api.dto.FolderDto;
 import com.github.task.tracker.api.dto.TaskDto;
-import com.github.task.tracker.api.dto.factories.ProjectDtoFactory;
-import com.github.task.tracker.api.dto.factories.ProjectWithTasksDto;
-import com.github.task.tracker.api.dto.factories.TaskDtoFactory;
-import com.github.task.tracker.api.exceptions.BadRequestException;
-import com.github.task.tracker.store.repositories.ProjectRepository;
-import com.github.task.tracker.store.repositories.TaskRepository;
+import com.github.task.tracker.api.factory.ProjectDtoFactory;
+import com.github.task.tracker.api.factory.ProjectWithTasksDto;
+import com.github.task.tracker.api.factory.TaskDtoFactory;
+import com.github.task.tracker.api.exception.BadRequestException;
+import com.github.task.tracker.store.repository.FolderRepository;
+import com.github.task.tracker.store.repository.TaskRepository;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +19,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class ProjectController {
-    ProjectRepository projectRepository;
+    FolderRepository projectRepository;
     ProjectDtoFactory projectDtoFactory;
     TaskRepository taskRepository;
     TaskDtoFactory taskDtoFactory;
 
     @Autowired
     public ProjectController(
-            ProjectRepository projectRepository,
+            FolderRepository projectRepository,
             ProjectDtoFactory projectDtoFactory,
             TaskRepository taskRepository,
             TaskDtoFactory taskDtoFactory)
@@ -38,7 +38,7 @@ public class ProjectController {
     }
 
     @GetMapping("/projects")
-    public List<ProjectDto> findAllProjects() {
+    public List<FolderDto> findAllProjects() {
         return projectRepository.findAll().stream()
                 .map(projectDtoFactory::makeProjectDto)
                 .toList();
@@ -49,7 +49,7 @@ public class ProjectController {
         if (projectRepository.findById(id).isEmpty()) {
             throw new BadRequestException("no such project exists");
         } else {
-            ProjectDto project = projectRepository.findById(id)
+            FolderDto project = projectRepository.findById(id)
                     .map(projectDtoFactory::makeProjectDto)
                     .get();
             List<TaskDto> tasks = taskRepository.findAll().stream()

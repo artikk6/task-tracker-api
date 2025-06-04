@@ -1,8 +1,7 @@
-package com.github.task.tracker.api.dto.factories;
+package com.github.task.tracker.api.dto.factory;
 
-import com.github.task.tracker.api.dto.ProjectDto;
 import com.github.task.tracker.api.dto.TaskDto;
-import com.github.task.tracker.store.entities.TaskEntity;
+import com.github.task.tracker.store.entity.TaskEntity;
 import org.springframework.stereotype.Component;
 
 @Component
