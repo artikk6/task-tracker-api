@@ -1,17 +1,25 @@
 package com.github.task.tracker.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.task.tracker.store.entity.TaskEntity;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
-@Data
-@NoArgsConstructor
+@Setter
+@Getter
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @Builder
-public class ProjectDto {
-    Long id;
-    String name;
-    LocalDate createdAt;
+public class FolderDto {
+
+    private Long id;
+
+    private String name;
+
+    @JsonProperty("created_at")
+    private LocalDate createdAt;
+
+    private List<TaskEntity> tasks;
 }

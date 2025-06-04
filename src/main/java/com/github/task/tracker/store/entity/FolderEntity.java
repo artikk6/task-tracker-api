@@ -1,25 +1,30 @@
-package com.github.task.tracker.store.entities;
+package com.github.task.tracker.store.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 @Entity
-@Table(name = "project")
-public class ProjectEntity {
+@Table(name = "folder")
+public class FolderEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(unique = true, nullable = false)
-    String name;
+    private String name;
 
-    LocalDate createdAt = LocalDate.now();
+    @Column(name = "created_at", nullable = false)
+    private LocalDate createdAt;
+
+    @OneToMany
+    @JoinColumn(name="folder_id")
+    private List<TaskEntity> tasks;
 }

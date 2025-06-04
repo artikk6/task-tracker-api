@@ -1,61 +1,38 @@
 package com.github.task.tracker.api.controller;
 
+
 import com.github.task.tracker.api.dto.FolderDto;
-import com.github.task.tracker.api.dto.TaskDto;
-import com.github.task.tracker.api.factory.ProjectDtoFactory;
-import com.github.task.tracker.api.factory.ProjectWithTasksDto;
-import com.github.task.tracker.api.factory.TaskDtoFactory;
-import com.github.task.tracker.api.exception.BadRequestException;
-import com.github.task.tracker.store.repository.FolderRepository;
-import com.github.task.tracker.store.repository.TaskRepository;
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.task.tracker.api.service.FolderService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @RequestMapping("/api")
-public class ProjectController {
-    FolderRepository projectRepository;
-    ProjectDtoFactory projectDtoFactory;
-    TaskRepository taskRepository;
-    TaskDtoFactory taskDtoFactory;
+class FolderController {
+    private final FolderService folderService;
 
-    @Autowired
-    public ProjectController(
-            FolderRepository projectRepository,
-            ProjectDtoFactory projectDtoFactory,
-            TaskRepository taskRepository,
-            TaskDtoFactory taskDtoFactory)
-    {
-        this.projectRepository = projectRepository;
-        this.projectDtoFactory = projectDtoFactory;
-        this.taskRepository = taskRepository;
-        this.taskDtoFactory = taskDtoFactory;
+    private static final String CREATE_FOLDER = "/create_folder";
+    private static final String FIND_ALL_FOLDERS = "/folders";
+    private static final String FIND_FOLDER = "/folder/{id}";
+
+    public FolderController(FolderService folderService) {
+        this.folderService = folderService;
+    }
+    @GetMapping(FIND_FOLDER)
+    public FolderDto folderDto(@PathVariable("id") Long id) {
+        return folderService.findFolder(id);
     }
 
-    @GetMapping("/projects")
-    public List<FolderDto> findAllProjects() {
-        return projectRepository.findAll().stream()
-                .map(projectDtoFactory::makeProjectDto)
-                .toList();
+    @GetMapping(FIND_ALL_FOLDERS)
+    public List<FolderDto> findAllFolders() {
+        return folderService.findAllFolders();
     }
 
-    @GetMapping("/project/{id}")
-    public ProjectWithTasksDto findProject(@PathVariable("id") Long id) {
-        if (projectRepository.findById(id).isEmpty()) {
-            throw new BadRequestException("no such project exists");
-        } else {
-            FolderDto project = projectRepository.findById(id)
-                    .map(projectDtoFactory::makeProjectDto)
-                    .get();
-            List<TaskDto> tasks = taskRepository.findAll().stream()
-                    .map(taskDtoFactory::makeProjectDto)
-                    .toList();
-            return new ProjectWithTasksDto(project, tasks);
-        }
+    @PostMapping(CREATE_FOLDER)
+    @ResponseStatus(HttpStatus.CREATED)
+    public FolderDto createFolder(@RequestParam String name) {
+        return folderService.createFolder(name);
     }
 }

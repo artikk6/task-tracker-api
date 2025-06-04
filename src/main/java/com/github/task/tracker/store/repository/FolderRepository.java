@@ -5,5 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProjectRepository extends JpaRepository<FolderEntity, Long> {
+public interface FolderRepository extends JpaRepository<FolderEntity, Long> {
+
+    boolean existsByName(String name);
 }

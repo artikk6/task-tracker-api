@@ -1,4 +1,4 @@
-package com.github.task.tracker.store.entities;
+package com.github.task.tracker.store.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,18 +13,15 @@ import java.time.LocalDate;
 @Table(name = "task")
 public class TaskEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
     private String name;
 
-    @Column(length = 1024)
+    @Column(name = "created_at", nullable = false)
+    private LocalDate createdAt;
+
+    @Column(length = 2048)
     private String description;
-
-    private LocalDate createdAt = LocalDate.now();
-
-    @ManyToOne
-    private ProjectEntity project;
-
 }
