@@ -13,15 +13,15 @@ import java.util.List;
 class FolderController {
     private final FolderService folderService;
 
-    private static final String CREATE_FOLDER = "/create_folder";
-    private static final String FIND_ALL_FOLDERS = "/folders";
     private static final String FIND_FOLDER = "/folder/{id}";
+    private static final String FIND_ALL_FOLDERS = "/folders";
+    private static final String CREATE_FOLDER = "/create_folder";
 
     public FolderController(FolderService folderService) {
         this.folderService = folderService;
     }
     @GetMapping(FIND_FOLDER)
-    public FolderDto folderDto(@PathVariable("id") Long id) {
+    public FolderDto findFolder(@PathVariable("id") Long id) {
         return folderService.findFolder(id);
     }
 

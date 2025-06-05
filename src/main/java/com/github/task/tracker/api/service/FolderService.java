@@ -22,6 +22,16 @@ public class FolderService {
         this.folderDtoFactory = folderDtoFactory;
     }
 
+    public FolderDto findFolder(Long id) {
+
+        if (folderRepository.findById(id).isEmpty()) {
+            throw new BadRequestException("Folder not found");
+        }
+        return folderDtoFactory.makeFolderDto(
+                folderRepository.findById(id).get()
+        );
+    }
+
     @Transactional
     public List<FolderDto> findAllFolders() {
 
@@ -33,16 +43,6 @@ public class FolderService {
         }
 
         return folders;
-    }
-
-    public FolderDto findFolder(Long id) {
-
-        if (folderRepository.findById(id).isEmpty()) {
-            throw new BadRequestException("Folder not found");
-        }
-        return folderDtoFactory.makeFolderDto(
-                folderRepository.findById(id).get()
-        );
     }
 
     @Transactional
